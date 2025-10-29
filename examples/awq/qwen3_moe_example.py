@@ -52,6 +52,16 @@ def preprocess(example):
             tokenize=False,
         )
     }
+    '''
+    text: <|im_start|>system
+        使用中文回答<|im_end|>
+        <|im_start|>user
+        请写一篇文章：我的妈妈，不少于1000字<|im_end|>
+        <|im_start|>assistant
+        <think>
+
+        </think>
+    '''
 
 
 ds = ds.map(preprocess)
@@ -66,6 +76,13 @@ def tokenize(sample):
         truncation=True,
         add_special_tokens=False,
     )
+    '''
+    return {'input_ids': tensor([[151644,   8948,    198,  37029, 104811, 102104, 151645,    198, 151644,
+        872,    198,  14880,  61443, 116562,   5122,  97611, 101935, 151645,
+        198, 151644,  77091,    198, 151667,    271, 151668,    271]],
+    device='cuda:0'), 'attention_mask': tensor([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1]], device='cuda:0')}
+    '''
 
 
 # Configure the quantization algorithm to run.
@@ -91,9 +108,8 @@ oneshot(
 print("\n\n")
 print("========== SAMPLE GENERATION ==============")
 dispatch_for_generation(model)
-input_ids = tokenizer("Hello my name is", return_tensors="pt").input_ids.to(
-    model.device
-)
+input_ids = tokenizer("Hello my name is", return_tensors="pt").input_ids.to(model.device)
+
 output = model.generate(input_ids, max_new_tokens=100)
 print(tokenizer.decode(output[0]))
 print("==========================================\n\n")
