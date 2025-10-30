@@ -66,7 +66,7 @@ def model_test(model, tokenizer, input_message, max_new_tokens):
 def myquantize(model_path, dataset_path, saved_path, dataset_format="parquet"):
     # Select number of samples. 256 samples is a good place to start.
     # Increasing the number of samples can improve accuracy.
-    NUM_CALIBRATION_SAMPLES = 2 #256
+    NUM_CALIBRATION_SAMPLES = 256 #256
     MAX_SEQUENCE_LENGTH = 512
 
     # =============== 1.Load model.===============
