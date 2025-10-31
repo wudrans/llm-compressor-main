@@ -70,7 +70,7 @@ def myquantize(model_path, dataset_path, saved_path, dataset_format="parquet"):
     MAX_SEQUENCE_LENGTH = 512
 
     # =============== 1.Load model.===============
-    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype="auto")
+    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype="auto", device_map="cuda")
     tokenizer = AutoTokenizer.from_pretrained(model_path)
 
     # original modet test

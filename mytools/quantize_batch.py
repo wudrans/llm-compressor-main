@@ -11,17 +11,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
 from utils.file_utils import read_json, get_subfolder, get_exclude_list
 from mytools.quantize import myquantize
+from utils.log import logger
+from utils.yml_utils import yaml_load
+
+quantize_config_path = "./mytools/quantize_config.yml"
 
 
 if __name__ == '__main__':
-    DATASET_PATH="/data8T/Text/HuggingFaceH4/ultrachat_200k/data"
+    quantize_config = yaml_load(quantize_config_path)
+   
+    DATASET_PATH = quantize_config['dataset_path']
     DATASET_SPLIT = "train_sft"
     dataset_path = os.path.join(DATASET_PATH, f"{DATASET_SPLIT}-*.parquet")
 
-    saved_root = "/data8T/models/LLM/Qwen_quantize-awq-sym"
+    saved_root = quantize_config['saved_root']
 
     # get all models
-    pretrained_path = "/data/wlj/pretrained/Qwen"
+    pretrained_path = quantize_config['pretrained_path']
     model_list = get_subfolder(pretrained_path)
     exclude_list = ['Qwen3-30B']
     model_list = get_exclude_list(model_list, exclude_list, exclude_flag=True)
@@ -31,11 +37,12 @@ if __name__ == '__main__':
     #               'Qwen3-4B-Thinking-2507', 'Qwen3-4B-Thinking-2507-FP8']
     print(model_list)
     
-    model_list = ['Qwen3-0.6B']
+    # model_list = ['Qwen3-4B-Thinking-2507']
 
     for model_name in model_list:
         model_path = os.path.join(pretrained_path, model_name)
-
+        logger.debug("========== %s =========="% model_path)
+        
         saved_path = os.path.join(saved_root, os.path.basename(model_path))
         os.makedirs(saved_path, exist_ok=True)
 
