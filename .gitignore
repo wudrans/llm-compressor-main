@@ -1,4 +1,5 @@
 # Packaging
+quantize_config.yml
 *.tar.gz
 tensorboard/*
 # Created by .ignore support plugin (hsz.mobi)
